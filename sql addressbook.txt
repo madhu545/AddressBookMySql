@@ -1,0 +1,284 @@
+//UC1 creating database
+
+mysql> CREATE DATABASE AddressBookService;
+Query OK, 1 row affected (1.56 sec)
+
+mysql> use AddressBookService;
+Database changed
+
+//UC2 creating addressbook table
+
+mysql> create table Address_Book_Table
+    -> (
+    -> FirstName VARCHAR (100) NOT NULL,
+    -> LastName VARCHAR(100) NOT NULL,
+    -> Address VARCHAR(300) NOT NULL,
+    -> City VARCHAR(150) NOT NULL,
+    -> State VARCHAR(100) NOT NULL,
+    -> ZiP INT NOT NULL,
+    -> PhoneNumber INT NOT NULL,
+    -> Email VARCHAR(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (1.93 sec)
+
+
+mysql> DESCRIBE Address_Book_Table;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| FirstName   | varchar(100) | NO   |     | NULL    |       |
+| LastName    | varchar(100) | NO   |     | NULL    |       |
+| Address     | varchar(300) | NO   |     | NULL    |       |
+| City        | varchar(150) | NO   |     | NULL    |       |
+| State       | varchar(100) | NO   |     | NULL    |       |
+| ZiP         | int          | NO   |     | NULL    |       |
+| PhoneNumber | int          | NO   |     | NULL    |       |
+| Email       | varchar(50)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+8 rows in set (0.25 sec)
+
+//UC3 Adding Contacts
+
+mysql> INSERT INTO Address_Book_Table VALUES
+    -> ('Sham','Kumar','1A,ABC Nagar','Hyderabad','Telangana',14254,8473242,'sham@gmail.com'),
+    -> ('Raghu','Reddy','5FC,AC Colony','Hyderabad','Telangana',45424,9542,'Raghu12@gmail.com'),
+    -> ('Ranveer','Reddy','8GH,RC Colony','Hyderabad','Telangana',54244,954542,'Raghu12@gmail.com');m');
+Query OK, 3 rows affected (0.24 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+//UC4 Editing Existing Contact by first name
+
+mysql> UPDATE Address_Book_Table
+    -> SET Address = 'Hyd', State='Telangana', Zip='45424', Email='Raghu12@gmail.com'
+    -> WHERE FirstName = 'Raghu';
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Address_Book_Table;
++-----------+----------+---------------+-----------+-----------+-------+-------------+-------------------+
+| FirstName | LastName | Address       | City      | State     | ZiP   | PhoneNumber | Email             |
++-----------+----------+---------------+-----------+-----------+-------+-------------+-------------------+
+| Sham      | Kumar    | 1A,ABC Nagar  | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |
+| Raghu     | Reddy    | Hyd           | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |
+| Ranveer   | Reddy    | 8GH,RC Colony | Hyderabad | Telangana | 54244 |      954542 | Raghu12@gmail.com |
++-----------+----------+---------------+-----------+-----------+-------+-------------+-------------------+
+3 rows in set (0.00 sec)
+
+//UC5 Deleting contact using first name
+
+
+mysql> DELETE FROM Address_Book_Table WHERE FirstName = 'Ranveer';
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from Address_Book_Table;
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| FirstName | LastName | Address      | City      | State     | ZiP   | PhoneNumber | Email             |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |
+| Raghu     | Reddy    | Hyd          | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+2 rows in set (0.03 sec)
+
+
+//UC6 ability to retrieve person belongs to city
+
+
+mysql>  SELECT * FROM Address_Book_Table WHERE City = 'Hyderabad';
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| FirstName | LastName | Address      | City      | State     | ZiP   | PhoneNumber | Email             |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |
+| Raghu     | Reddy    | Hyd          | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+2 rows in set (0.00 sec)
+
+//UC7 ability to get size of the book by city
+
+
+mysql>  SELECT COUNT(City) FROM Address_Book_Table;
++-------------+
+| COUNT(City) |
++-------------+
+|           2 |
++-------------+
+1 row in set (0.03 sec)
+
+//UC8 To retrieve entries by alphabetical order using first name
+
+mysql>  SELECT * FROM Address_Book_Table;
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| FirstName | LastName | Address      | City      | State     | ZiP   | PhoneNumber | Email             |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |
+| Raghu     | Reddy    | Hyd          | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+
+2 rows in set (0.04 sec)
+
+//UC9 ability to find each address book with name and type
+
+mysql> ALTER TABLE Address_Book_Table ADD Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY AFTER Email;
+Query OK, 0 rows affected (14.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql>  SELECT * FROM Address_Book_Table;
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+
+| FirstName | LastName | Address      | City      | State     | ZiP   | PhoneNumber | Email             | Id |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |  1 |
+| Raghu     | Reddy    | Hyd          | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |  2 |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+
+2 rows in set (0.02 sec)
+
+mysql> ALTER TABLE Address_Book_Table ADD Type VARCHAR(50) NOT NULL AFTER Id;
+Query OK, 0 rows affected (2.94 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE Address_Book_Table SET Type = 'Family' WHERE Id = 1;
+Query OK, 1 row affected (0.44 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Address_Book_Table SET Type = 'Friend' WHERE Id = 2;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Address_Book_Table;
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+--------+
+| FirstName | LastName | Address      | City      | State     | ZiP   | PhoneNumber | Email             | Id | Type   |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+--------+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad | Telangana | 14254 |     8473242 | sham@gmail.com    |  1 | Family |
+| Raghu     | Reddy    | Hyd          | Hyderabad | Telangana | 45424 |        9542 | Raghu12@gmail.com |  2 | Friend |
++-----------+----------+--------------+-----------+-----------+-------+-------------+-------------------+----+--------+
+2 rows in set (0.03 sec)
+
+mysql>  insert into Address_Book_Table (FirstName,LastName,Address,City,State,Zip,PhoneNumber,Email,Id,Type) values("pavan","Sharma","Gachibowli","Ranga Raddy","Telangana",'55750','912399',"pavansharma12@gmail.com","3","Profession");
+Query OK, 1 row affected (0.19 sec)
+
+mysql> ALTER TABLE Address_Book_Table ADD (AddressBook VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (3.75 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>  UPDATE  Address_Book_Table SET AddressBook = 'contact 1' WHERE Id = 1;
+Query OK, 1 row affected (0.27 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  UPDATE  Address_Book_Table SET AddressBook = 'contact 2' WHERE Id = 2;
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE  Address_Book_Table SET AddressBook = 'contact 3' WHERE Id = 3;
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>  select * from Address_Book_Table;
++-----------+----------+--------------+-------------+-----------+-------+-------------+-------------------------+----+------------+-------------+
+| FirstName | LastName | Address      | City        | State     | ZiP   | PhoneNumber | Email                   | Id | Type       | AddressBook |
++-----------+----------+--------------+-------------+-----------+-------+-------------+-------------------------+----+------------+-------------+
+| Sham      | Kumar    | 1A,ABC Nagar | Hyderabad   | Telangana | 14254 |     8473242 | sham@gmail.com          |  1 | Family     | contact 1   |
+| Raghu     | Reddy    | Hyd          | Hyderabad   | Telangana | 45424 |        9542 | Raghu12@gmail.com       |  2 | Friend     | contact 2   |
+| pavan     | Sharma   | Gachibowli   | Ranga Raddy | Telangana | 55750 |      912399 | pavansharma12@gmail.com |  3 | Profession | contact 3   |
++-----------+----------+--------------+-------------+-----------+-------+-------------+-------------------------+----+------------+-------------+
+3 rows in set (0.00 sec)
+
+
+//UC10 count by Type
+
+
+mysql> SELECT Type, COUNT(FirstName) FROM Address_Book_Table GROUP BY Type;
++------------+------------------+
+| Type       | COUNT(FirstName) |
++------------+------------------+
+| Family     |                1 |
+| Friend     |                1 |
+| Profession |                1 |
++------------+------------------+
+3 rows in set (0.36 sec)
+
+//UC11
+
+
+mysql> insert into Address_Book_Table (FirstName,LastName,Address,City,State,Zip,PhoneNumber,Email,Id,type,AddressBook) values("Anil", "kumar", "123AB,ABC Colony", "karim nagar", "Uttarpradesh", '54155', '921495', "anil123@gmail.com", '4', "Family", "contact4");
+Query OK, 1 row affected (0.10 sec)
+
+mysql>  select * from Address_Book_Table;
++-----------+----------+------------------+-------------+--------------+-------+-------------+-------------------------+----+------------+-------------+
+| FirstName | LastName | Address          | City        | State        | ZiP   | PhoneNumber | Email                   | Id | Type       | AddressBook |
++-----------+----------+------------------+-------------+--------------+-------+-------------+-------------------------+----+------------+-------------+
+| Sham      | Kumar    | 1A,ABC Nagar     | Hyderabad   | Telangana    | 14254 |     8473242 | sham@gmail.com          |  1 | Family     | contact 1   |
+| Raghu     | Reddy    | Hyd              | Hyderabad   | Telangana    | 45424 |        9542 | Raghu12@gmail.com       |  2 | Friend     | contact 2   |
+| pavan     | Sharma   | Gachibowli       | Ranga Raddy | Telangana    | 55750 |      912399 | pavansharma12@gmail.com |  3 | Profession | contact 3   |
+| Anil      | kumar    | 123AB,ABC Colony | karim nagar | Uttarpradesh | 54155 |      921495 | anil123@gmail.com       |  4 | Family     | contact4    |
++-----------+----------+------------------+-------------+--------------+-------+-------------+-------------------------+----+------------+-------------+
+4 rows in set (0.06 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
